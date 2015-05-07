@@ -9,3 +9,18 @@ gulp.task('lint', function() {
     .pipe(jshint({lookup: true}))
     .pipe(jshint.reporter('jshint-stylish'));
 });
+
+gulp.task('test', function() {
+  gulp.src(['./test/*.js'])
+    .pipe(mocha({reporter:'landing'}))
+    .once('error', function() {
+      process.exit(1);
+    })
+    .once('end', function() {
+      process.exit();
+    });
+});
+
+gulp.task('watch', function() {
+  gulp.watch(['./lib/*.js'], ['lint', 'test']);
+});
