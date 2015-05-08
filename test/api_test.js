@@ -1,10 +1,10 @@
 'use strict';
 
-process.env.MONGOLAB_URI = 'mongodb://localhost/edicts_test';
+process.env.MONGOLAB_URI = 'mongodb://localhost/emperors_test';
 // process.env.PORT = 3333;
 require('../lib/server');
 
-var Edict = require('../lib/models/edict');
+var Emperor = require('../lib/models/emperor');
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
@@ -12,7 +12,7 @@ var mongoose = require('mongoose');
 var expect = require('chai').expect;
 chai.use(chaiHttp);
 
-describe('Edicts API', function() {
+describe('Emperors API', function() {
   after(function(done) {
     mongoose.connection.db.dropDatabase(function() {
       done();
@@ -23,15 +23,15 @@ describe('Edicts API', function() {
     chai.request('localhost:3000')
       .get('/')
       .end(function(err, res) {
-        expect(res.body.message).to.equal('Welcome, our API of Papal Edicts is housed at the /api URL.');
+        expect(res.body.message).to.equal('Welcome, our API of Roman Emperors housed at the /api URL.');
         done();
       });
   });
 
-  it('Should post an edict', function(done) {
+  it('Should post an emperor', function(done) {
     chai.request('localhost:3000')
-      .post('/api/edict')
-      .send({title: 'Indulgences'})
+      .post('/api/emperor')
+      .send({name: 'Julian', birth: 100, death: 100})
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.body.message).to.eql('created');
