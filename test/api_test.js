@@ -1,6 +1,7 @@
 'use strict';
 
 process.env.MONGOLAB_URI = 'mongodb://localhost/edicts_test';
+// process.env.PORT = 3333;
 require('../lib/server');
 
 var Edict = require('../lib/models/edict');
