@@ -39,9 +39,9 @@ describe('Emperors API', function() {
       });
   });
 
-  it('Should GET list of all edicts', function(done) {
+  it('Should GET list of all emperors', function(done) {
     chai.request('localhost:3000')
-      .get('/api/edict')
+      .get('/api/emperor')
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(Array.isArray(res.body)).to.eql(true);
@@ -52,19 +52,19 @@ describe('Emperors API', function() {
   describe('PUT and DELETE', function(done) {
 
     beforeEach(function(done) {
-      var testEdict = new Edict({title: 'Test Edict', pope: 'Julius!'});
-      testEdict.save(function(err, data) {
+      var testEmperor = new Emperor({name: 'Test', birth: 100, death: 100 });
+      testEmperor.save(function(err, data) {
         if (err) throw err;
-        this.testEdict = data;
+        this.testEmperor = data;
         done();
       }.bind(this));
     });
 
-    it('Should update existing edict', function(done) {
-      var id = this.testEdict._id;
+    it('Should update existing emperor', function(done) {
+      var id = this.testEmperor._id;
       chai.request('localhost:3000')
-        .put('/api/edict/' + id )
-        .send({title: 'Updated edict'})
+        .put('/api/emperor/' + id )
+        .send({title: 'Updated emperor'})
         .end(function(err, res) {
           expect(err).to.eql(null);
           expect(res.body.message).to.eql('updated');
@@ -72,10 +72,10 @@ describe('Emperors API', function() {
         });
     });
 
-    it('Should delete existing edict', function() {
-      var id = this.testEdict._id;
+    it('Should delete existing emperor', function() {
+      var id = this.testEmperor._id;
       chai.request('localhost:3000')
-        .del('/api/edict/' + id )
+        .del('/api/emperor/' + id )
         .end(function(err, res) {
           expect(err).to.eql(null);
           expect(res.body.message).to.eql('deleted');

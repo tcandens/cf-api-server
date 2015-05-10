@@ -12,7 +12,7 @@ gulp.task('lint', function() {
 
 gulp.task('test', function() {
   gulp.src(['./test/**/*.js'])
-    .pipe(mocha({reporter:'landing'}))
+    .pipe(mocha({reporter:'list'}))
     .once('error', function() {
       process.exit(1);
     })
@@ -24,3 +24,5 @@ gulp.task('test', function() {
 gulp.task('watch', function() {
   gulp.watch(['./lib/**/*.js'], ['lint', 'test']);
 });
+
+gulp.task('default', ['lint', 'test']);
