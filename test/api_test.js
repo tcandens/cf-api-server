@@ -3,8 +3,8 @@
 var port = process.env.PORT = 3333;
 require('../lib/server');
 
+DB = 'emperors_test';
 var Emperor = require('../lib/models/emperor');
-process.env.DB = 'emperors_test';
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
@@ -13,13 +13,13 @@ chai.use(chaiHttp);
 
 describe('Emperors API', function() {
 
-  after(function(done) {
-    Emperor.drop()
-      .then(function( data ) {
-        console.log('Dropped all test models')
-      });
-    done();
-  });
+  // after(function(done) {
+  //   Emperor.drop()
+  //     .then(function( data ) {
+  //       console.log('Dropped all test models')
+  //     });
+  //   done();
+  // });
 
   it('should send greeting with info on API location', function(done) {
     chai.request('localhost:' + port)
@@ -33,10 +33,10 @@ describe('Emperors API', function() {
   it('should post an emperor', function(done) {
     chai.request('localhost:' + port)
       .post('/api/emperor')
-      .send({name: 'Julian', birth: 100, death: 100})
+      .send({name: 'TEST', birth: 100, death: 100})
       .end(function(err, res) {
         expect(err).to.eql(null);
-        expect(res.body.message).to.eql('created Julian');
+        expect(res.body.message).to.eql('created TEST');
         done();
       });
   });
