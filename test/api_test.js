@@ -1,25 +1,27 @@
 'use strict';
 
-process.env.MONGOLAB_URI = 'mongodb://localhost/emperors_test';
 var port = process.env.PORT = 3333;
 require('../lib/server');
 
 var Emperor = require('../lib/models/emperor');
+process.env.DB = 'emperors_test';
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
-var mongoose = require('mongoose');
 var expect = require('chai').expect;
 chai.use(chaiHttp);
 
 describe('Emperors API', function() {
+
   after(function(done) {
-    mongoose.connection.db.dropDatabase(function() {
-      done();
-    });
+    Emperor.drop()
+      .then(function( data ) {
+        console.log('Dropped all test models')
+      });
+    done();
   });
 
-  it('Should send greeting with info on API location', function(done) {
+  it('should send greeting with info on API location', function(done) {
     chai.request('localhost:' + port)
       .get('/')
       .end(function(err, res) {
@@ -28,18 +30,18 @@ describe('Emperors API', function() {
       });
   });
 
-  it('Should post an emperor', function(done) {
+  it('should post an emperor', function(done) {
     chai.request('localhost:' + port)
       .post('/api/emperor')
       .send({name: 'Julian', birth: 100, death: 100})
       .end(function(err, res) {
         expect(err).to.eql(null);
-        expect(res.body.message).to.eql('created');
+        expect(res.body.message).to.eql('created Julian');
         done();
       });
   });
 
-  it('Should GET list of all emperors', function(done) {
+  it('should GET list of all emperors', function(done) {
     chai.request('localhost:' + port)
       .get('/api/emperor')
       .end(function(err, res) {
@@ -49,9 +51,9 @@ describe('Emperors API', function() {
       });
   });
 
-  it('Should get a single emperor by name', function(done) {
+  it('should get a single emperor by name', function(done) {
     chai.request('localhost:' + port)
-      .get('/api/emperor/' + 'Julian')
+      .get('/api/emperor/name/' + 'Test')
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.body.length).to.eql(1);
@@ -63,11 +65,11 @@ describe('Emperors API', function() {
 
     beforeEach(function(done) {
       var testEmperor = new Emperor({name: 'Test', birth: 100, death: 100 });
-      testEmperor.save(function(err, data) {
-        if (err) throw err;
-        this.testEmperor = data;
-        done();
-      }.bind(this));
+      testEmperor.save()
+        .then(function( data ) {
+          this.testEmperor = data
+        }.bind(this))
+        .catch( console.log )
     });
 
     it('Should update existing emperor', function(done) {
@@ -92,5 +94,4 @@ describe('Emperors API', function() {
         });
     });
   });
-
 });
