@@ -1,7 +1,7 @@
 'use strict';
 
 var port = process.env.PORT = 3333;
-var DB = 'emperors_test';
+var DB = process.env.DB = 'emperors_test';
 require('../lib/server');
 
 var Emperor = require('../lib/models/emperor');
@@ -13,13 +13,17 @@ chai.use(chaiHttp);
 
 describe('Emperors API', function() {
 
-  // after(function(done) {
-  //   Emperor.drop()
-  //     .then(function( data ) {
-  //       console.log('Dropped all test models')
-  //     });
-  //   done();
-  // });
+  after(function(done) {
+    Emperor.destroy({
+      where: {
+        id: { $gt: 0 }
+      }
+    })
+      .then(function( dropped ) {
+        console.log( 'Test tables dropped' )
+      })
+    done();
+  });
 
   it('should send greeting with info on API location', function(done) {
     chai.request('localhost:' + port)
@@ -53,7 +57,7 @@ describe('Emperors API', function() {
 
   it('should get a single emperor by name', function(done) {
     chai.request('localhost:' + port)
-      .get('/api/emperor/name/' + 'Test')
+      .get('/api/emperor/name/' + 'TEST')
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.body.length).to.eql(1);
@@ -61,37 +65,56 @@ describe('Emperors API', function() {
       });
   });
 
-  describe('PUT and DELETE', function(done) {
+  describe('PUT and DELETE', function() {
 
-    beforeEach(function(done) {
-      var testEmperor = new Emperor({name: 'Test', birth: 100, death: 100 });
-      testEmperor.save()
-        .then(function( data ) {
-          this.testEmperor = data
-        }.bind(this))
-        .catch( console.log )
-    });
+    afterEach(function( done ) {
+      Emperor.destroy({
+        where: {
+          id: { $gt: 0 }
+        }
+      })
+        .then(function( destroyed ) {
+          console.log( 'Tester dropped' );
+        })
+        .catch( console.log );
+      done();
+    })
 
     it('Should update existing emperor', function(done) {
-      var id = this.testEmperor._id;
-      chai.request('localhost:' + port)
-        .put('/api/emperor/' + id )
-        .send({title: 'Updated emperor'})
-        .end(function(err, res) {
-          expect(err).to.eql(null);
-          expect(res.body.message).to.eql('updated');
-          done();
-        });
+      Emperor.create({
+        name: 'Test',
+        birth: 200,
+        death: 220
+      })
+        .then(function( tester ) {
+          chai.request('localhost:' + port)
+            .put('/api/emperor/' + tester.id )
+            .send({name: 'Updated emperor'})
+            .end(function(err, res) {
+              expect(err).to.eql(null);
+              expect(res.body.message).to.eql('updated');
+              done();
+            });
+        })
+        .catch( console.log );
     });
 
     it('Should delete existing emperor', function() {
-      var id = this.testEmperor._id;
-      chai.request('localhost:' + port)
-        .del('/api/emperor/' + id )
-        .end(function(err, res) {
-          expect(err).to.eql(null);
-          expect(res.body.message).to.eql('deleted');
-        });
+      Emperor.create({
+        name: 'Test',
+        birth: 200,
+        death: 220
+      })
+        .then(function( tester ) {
+          chai.request('localhost:' + port )
+            .del('/api/emperor/' + tester.id )
+            .end(function(err, res) {
+              expect(err).to.eql(null);
+              expect(res.body.message).to.eql('destroyed')
+              done();
+            });
+        })
+        .catch( console.log );
     });
   });
 });
