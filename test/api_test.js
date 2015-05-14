@@ -1,9 +1,9 @@
 'use strict';
 
 var port = process.env.PORT = 3333;
+var DB = 'emperors_test';
 require('../lib/server');
 
-DB = 'emperors_test';
 var Emperor = require('../lib/models/emperor');
 
 var chai = require('chai');
