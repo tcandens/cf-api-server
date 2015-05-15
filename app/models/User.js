@@ -6,6 +6,7 @@ var DBPASS = process.env.DBPASS || 'kikapoo';
 
 var Sql = require('sequelize');
 var bcrypt = require('bcrypt');
+var eat = require('eat');
 
 var sql = new Sql( DB, DBUSER, DBPASS, { dialect: 'postgres' })
 
@@ -27,6 +28,9 @@ User.methods = {
     bcrypt.compare( password, hash, function( err, res ) {
       callback( err, res );
     });
+  },
+  generateToken: function( id, secret, callback ) {
+    eat.encode({ id: id }, secret, callback );
   }
 }
 
