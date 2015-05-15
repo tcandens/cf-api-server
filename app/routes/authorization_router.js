@@ -1,7 +1,5 @@
 'use strict';
 
-process.env.SECRET = 'changemechangemechangeme!'
-
 var express = require('express');
 var bodyParser = require('body-parser');
 var User = require('../models/User');

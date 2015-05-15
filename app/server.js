@@ -1,6 +1,7 @@
 'use strict';
 
 var port = process.env.PORT || 3000;
+process.env.SECRET = 'changemechangemechangeme!'
 
 var express = require('express');
 var Sql = require('sequelize');
