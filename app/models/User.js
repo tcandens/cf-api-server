@@ -14,7 +14,32 @@ var User = sql.define('User', {
   username: Sql.STRING,
   email: { type: Sql.STRING, validate: { isEmail: true } },
   password: { type: Sql.STRING }
+}, {
+  classMethods: {
+    generateHash: function( password, callback ) {
+      bcrypt.genSalt( 8, function( err, salt ) {
+        bcrypt.hash( password, salt, function( err, hash ) {
+          callback( err, hash );
+        });
+      });
+    }
+  },
+
+  instanceMethods: {
+    getId: function() {
+      return this.getDataValue( 'id' );
+    },
+    checkPassword: function( password, callback ) {
+      bcrypt.compare( password, this.getDataValue( 'password' ), function( err, res ) {
+        callback( err, res );
+      });
+    },
+    generateToken: function( secret, callback ) {
+      eat.encode({ id: this.getId() }, secret, callback );
+    }
+  }
 });
+
 
 User.methods = {
   generateHash: function( password, callback ) {

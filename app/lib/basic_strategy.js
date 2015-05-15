@@ -14,7 +14,7 @@ module.exports = function( passport ) {
         if ( !user ) {
           done( null, false );
         }
-        User.methods.checkPassword( password, user.getDataValue( 'password' ), function( err, res ) {
+        user.checkPassword( password, function( err, res ) {
           if ( !res ) done( err, false );
           if ( res ) done( null, user );
         })
