@@ -3,7 +3,7 @@
 var express = require('express');
 var bodyParser = require('body-parser');
 // var Sql = require('sequelize');
-var Emperor = require('../models/emperor');
+var Emperor = require('../models/Emperor');
 
 var emperorsRouter = module.exports = function(router) {
 

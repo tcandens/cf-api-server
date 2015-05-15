@@ -22,6 +22,11 @@ User.methods = {
         callback( err, hash );
       });
     });
+  },
+  checkPassword: function( password, hash, callback ) {
+    bcrypt.compare( password, hash, function( err, res ) {
+      callback( err, res );
+    });
   }
 }
 
