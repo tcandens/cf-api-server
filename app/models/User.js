@@ -12,7 +12,7 @@ var sql = new Sql( DB, DBUSER, DBPASS, { dialect: 'postgres' })
 
 var User = sql.define('User', {
   username: Sql.STRING,
-  email: { type: Sql.STRING, validate: { isEmail: true } },
+  email: { type: Sql.STRING, validate: { isEmail: true }, unique: true },
   password: { type: Sql.STRING }
 }, {
   classMethods: {

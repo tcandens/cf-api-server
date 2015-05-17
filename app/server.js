@@ -16,7 +16,7 @@ var authRouter = express.Router();
 
 require('./lib/basic_strategy')( passport );
 
-require('./routes/emperors_router')( emperorsRouter );
+require('./routes/emperors_router')( emperorsRouter, passport );
 require('./routes/authorization_router')( authRouter, passport );
 
 app.use('/api', emperorsRouter );

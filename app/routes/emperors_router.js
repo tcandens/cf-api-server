@@ -5,7 +5,7 @@ var bodyParser = require('body-parser');
 // var Sql = require('sequelize');
 var Emperor = require('../models/Emperor');
 
-var emperorsRouter = module.exports = function(router) {
+var emperorsRouter = module.exports = function( router, passport ) {
 
   router.use( bodyParser.json() );
 
