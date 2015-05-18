@@ -84,7 +84,7 @@ describe('Emperors API', function() {
         });
     });
 
-    it('Should delete existing emperor', function() {
+    it('Should delete existing emperor', function( done ) {
       chai.request('localhost:' + port )
         .del('/api/emperor/' + this.testEmperor.id )
         .send({ token: this.token })

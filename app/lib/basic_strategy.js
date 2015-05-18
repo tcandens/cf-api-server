@@ -12,9 +12,11 @@ module.exports = function( passport ) {
     })
       .then(function( user ) {
         if ( !user ) {
+          console.log( 'no user' );
           done( null, false );
         }
         user.checkPassword( password, function( err, res ) {
+          console.log( 'wrong password' );
           if ( !res ) done( err, false );
           if ( res ) done( null, user );
         });
