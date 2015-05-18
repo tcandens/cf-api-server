@@ -2,7 +2,7 @@
 
 // Global Variables
 var port = process.env.PORT || 3000;
-process.env.SECRET = process.env.SECRET || 'changemechangemechangeme!'
+process.env.SECRET = process.env.SECRET || 'changemechangemechangeme!';
 
 // Dependancies
 var express = require('express');

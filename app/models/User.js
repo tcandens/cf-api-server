@@ -8,7 +8,7 @@ var Sql = require('sequelize');
 var bcrypt = require('bcrypt');
 var eat = require('eat');
 
-var sql = new Sql( DB, DBUSER, DBPASS, { dialect: 'postgres' })
+var sql = new Sql( DB, DBUSER, DBPASS, { dialect: 'postgres' });
 
 var User = sql.define('User', {
   username: Sql.STRING,

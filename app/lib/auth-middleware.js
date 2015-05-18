@@ -33,5 +33,5 @@ module.exports = function( secret ) {
         res.json({ message: 'Expired token' });
       }
     });
-  }
-}
+  };
+};
