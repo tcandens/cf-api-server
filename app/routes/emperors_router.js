@@ -2,29 +2,29 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
-// var Sql = require('sequelize');
-var Emperor = require('../models/emperor');
+var Emperor = require('../models/Emperor');
+var authorize = require('../lib/auth-middleware')( process.env.SECRET );
 
-var emperorsRouter = module.exports = function(router) {
+var emperorsRouter = module.exports = function( router, passport ) {
 
   router.use( bodyParser.json() );
 
   router.route('/emperor')
     .get(function(req, res) {
       Emperor.findAll({})
-        .then(function( emperors ) {
+        .then( function( emperors ) {
           res.json( emperors );
         })
         .catch( console.log );
     })
-    .post(function(req, res) {
+    .post( authorize, function(req, res) {
       Emperor.create( req.body )
         .then(function( newEmperor ) {
           res.json({message: 'created ' + newEmperor.name });
         })
         .catch( console.log );
     })
-    .delete(function(req, res) {
+    .delete( authorize, function(req, res) {
       Emperor.destroy({
         where: {
           id: {$gt: 0}
@@ -47,7 +47,7 @@ var emperorsRouter = module.exports = function(router) {
         })
         .catch( console.log );
     })
-    .put(function(req, res) {
+    .put( authorize, function(req, res) {
       Emperor.findOne( req.params.id )
         .then(function( toUpdate ) {
           toUpdate.update( req.body )
@@ -57,7 +57,7 @@ var emperorsRouter = module.exports = function(router) {
         })
         .catch( console.log );
     })
-    .delete(function(req, res) {
+    .delete( authorize, function(req, res) {
       Emperor.destroy({
         where: {
           id: req.params.id
