@@ -16,17 +16,22 @@ module.exports = function( secret ) {
         return res.status(400).json({ message: 'Unauthorized' });
       }
       console.log( decoded );
-      User.findOne({
-        where: {
-          id: decoded.id
-        }
-      })
-        .then(function( user ) {
-          // Attach authorized user model to request
-          req.user = user;
-          next();
+      // Check if token has expired
+      if ( decoded.expires - new Date().getTime() < 3600000 ) {
+        User.findOne({
+          where: {
+            id: decoded.id
+          }
         })
-        .catch( console.log );
-    })
+          .then(function( user ) {
+            // Attach authorized user model to request
+            req.user = user;
+            next();
+          })
+          .catch( console.log );
+      } else {
+        res.json({ message: 'Expired token' });
+      }
+    });
   }
 }

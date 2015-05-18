@@ -24,7 +24,7 @@ var emperorsRouter = module.exports = function( router, passport ) {
         })
         .catch( console.log );
     })
-    .delete(function(req, res) {
+    .delete( authorize, function(req, res) {
       Emperor.destroy({
         where: {
           id: {$gt: 0}
@@ -47,7 +47,7 @@ var emperorsRouter = module.exports = function( router, passport ) {
         })
         .catch( console.log );
     })
-    .put(function(req, res) {
+    .put( authorize, function(req, res) {
       Emperor.findOne( req.params.id )
         .then(function( toUpdate ) {
           toUpdate.update( req.body )
@@ -57,7 +57,7 @@ var emperorsRouter = module.exports = function( router, passport ) {
         })
         .catch( console.log );
     })
-    .delete(function(req, res) {
+    .delete( authorize, function(req, res) {
       Emperor.destroy({
         where: {
           id: req.params.id

@@ -20,8 +20,13 @@ var authRouter = module.exports = function( router, passport ) {
         password: hash
       })
         .then(function( user ) {
-          res.json({ message: 'User created' });
-          console.log( user );
+          user.gnerateToken( process.env.SECRET, function( err, token ) {
+            if ( err ) {
+              console.log( err );
+              return res.status(500).json({ message: "Cannot generate token" });
+            }
+            res.json({ message: 'User created', token: token });
+          })
         })
         .catch(function( err ) {
           res.json({ message: 'Cannot create user' });
@@ -35,10 +40,9 @@ var authRouter = module.exports = function( router, passport ) {
       req.user.generateToken( process.env.SECRET, function( err, token ){
         if ( err ) {
           console.log( err );
-          res.status(500).json({ message: "Cannot generate token" });
+          return res.status(500).json({ message: "Cannot generate token" });
         }
         res.json({ token: token });
       });
-      // res.json({ message: 'Signed In' })
   })
 }

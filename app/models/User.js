@@ -35,29 +35,10 @@ var User = sql.define('User', {
       });
     },
     generateToken: function( secret, callback ) {
-      eat.encode({ id: this.getId() }, secret, callback );
+      eat.encode({ id: this.getId(), expires: ( new Date().getTime() + 3600000 ) }, secret, callback );
     }
   }
 });
-
-
-User.methods = {
-  generateHash: function( password, callback ) {
-    bcrypt.genSalt( 8, function( err, salt ) {
-      bcrypt.hash( password, salt, function( err, hash ) {
-        callback( err, hash );
-      });
-    });
-  },
-  checkPassword: function( password, hash, callback ) {
-    bcrypt.compare( password, hash, function( err, res ) {
-      callback( err, res );
-    });
-  },
-  generateToken: function( id, secret, callback ) {
-    eat.encode({ id: id }, secret, callback );
-  }
-}
 
 User.sync();
 
