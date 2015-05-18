@@ -1,10 +1,12 @@
 'use strict';
 
+process.env.SECRET = process.env.SECRET || 'changemechangemechangeme!';
 var port = process.env.PORT = 3333;
 var DB = process.env.DB = 'emperors_test';
-require('../lib/server');
+require('../app/server');
 
-var Emperor = require('../lib/models/emperor');
+var Emperor = require('../app/models/Emperor');
+var User = require('../app/models/User');
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');
@@ -13,31 +15,19 @@ chai.use(chaiHttp);
 
 describe('Emperors API', function() {
 
-  after(function(done) {
-    Emperor.destroy({
-      where: {
-        id: { $gt: 0 }
-      }
-    })
-      .then(function( dropped ) {
-        console.log( 'Test tables dropped' )
-      })
+  before(function( done ) {
+    this.user = User.build({ username: 'test', email: 'test@example.com' })
+    this.user.generateToken( process.env.SECRET, function( err, token ) {
+      if ( err ) console.log( err );
+      this.token = token;
+    }.bind( this ));
     done();
-  });
-
-  it('should send greeting with info on API location', function(done) {
-    chai.request('localhost:' + port)
-      .get('/')
-      .end(function(err, res) {
-        expect(res.body.message).to.equal('Welcome, our API of Roman Emperors housed at the /api URL.');
-        done();
-      });
-  });
+  })
 
   it('should post an emperor', function(done) {
     chai.request('localhost:' + port)
       .post('/api/emperor')
-      .send({name: 'TEST', birth: 100, death: 100})
+      .send({name: 'TEST', birth: 100, death: 100, token: this.token })
       .end(function(err, res) {
         expect(err).to.eql(null);
         expect(res.body.message).to.eql('created TEST');
@@ -55,19 +45,22 @@ describe('Emperors API', function() {
       });
   });
 
-  it('should get a single emperor by name', function(done) {
-    chai.request('localhost:' + port)
-      .get('/api/emperor/name/' + 'TEST')
-      .end(function(err, res) {
-        expect(err).to.eql(null);
-        expect(res.body.length).to.eql(1);
-        done();
-      });
-  });
-
   describe('PUT and DELETE', function() {
 
-    afterEach(function( done ) {
+    beforeEach(function( done ) {
+      var self = this;
+      Emperor.create({
+        name: 'Test',
+        birth: 200,
+        death: 220
+      })
+        .then(function( emperor ) {
+          this.testEmperor = emperor;
+          done();
+        }.bind( self ))
+    })
+
+    afterEach(function() {
       Emperor.destroy({
         where: {
           id: { $gt: 0 }
@@ -77,44 +70,29 @@ describe('Emperors API', function() {
           console.log( 'Tester dropped' );
         })
         .catch( console.log );
-      done();
     })
 
     it('Should update existing emperor', function(done) {
-      Emperor.create({
-        name: 'Test',
-        birth: 200,
-        death: 220
-      })
-        .then(function( tester ) {
-          chai.request('localhost:' + port)
-            .put('/api/emperor/' + tester.id )
-            .send({name: 'Updated emperor'})
-            .end(function(err, res) {
-              expect(err).to.eql(null);
-              expect(res.body.message).to.eql('updated');
-              done();
-            });
-        })
-        .catch( console.log );
+      console.log( this );
+      chai.request('localhost:' + port)
+        .put('/api/emperor/' + this.testEmperor.id )
+        .send({name: 'Updated emperor', token: this.token })
+        .end(function(err, res) {
+          expect(err).to.eql(null);
+          expect(res.body.message).to.eql('updated');
+          done();
+        });
     });
 
     it('Should delete existing emperor', function() {
-      Emperor.create({
-        name: 'Test',
-        birth: 200,
-        death: 220
-      })
-        .then(function( tester ) {
-          chai.request('localhost:' + port )
-            .del('/api/emperor/' + tester.id )
-            .end(function(err, res) {
-              expect(err).to.eql(null);
-              expect(res.body.message).to.eql('destroyed')
-              done();
-            });
-        })
-        .catch( console.log );
+      chai.request('localhost:' + port )
+        .del('/api/emperor/' + this.testEmperor.id )
+        .send({ token: this.token })
+        .end(function(err, res) {
+          expect(err).to.eql(null);
+          expect(res.body.message).to.eql('destroyed')
+          done();
+        });
     });
   });
 });

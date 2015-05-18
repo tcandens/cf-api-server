@@ -10,7 +10,7 @@ var sql = new Sql( DB, DBUSER, DBPASS,
     dialect: 'postgres'
 });
 
-var Emperor = module.exports = sql.define('Emperor', {
+var Emperor = sql.define('Emperor', {
   name: Sql.STRING,
   birth: Sql.STRING,
   death: Sql.STRING,
@@ -19,3 +19,5 @@ var Emperor = module.exports = sql.define('Emperor', {
 });
 
 Emperor.sync();
+
+module.exports = Emperor;
