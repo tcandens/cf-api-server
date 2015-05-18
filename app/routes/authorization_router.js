@@ -20,7 +20,7 @@ var authRouter = module.exports = function( router, passport ) {
         password: hash
       })
         .then(function( user ) {
-          user.gnerateToken( process.env.SECRET, function( err, token ) {
+          user.generateToken( process.env.SECRET, function( err, token ) {
             if ( err ) {
               console.log( err );
               return res.status(500).json({ message: "Cannot generate token" });
