@@ -1,7 +1,7 @@
 'use strict';
 
 // Global Variables
-var port = process.env.PORT || 4000;
+var port = process.env.PORT || 3000;
 process.env.SECRET = process.env.SECRET || 'changemechangemechangeme!'
 
 // Dependancies
@@ -15,7 +15,6 @@ var app = express();
 var emperorsRouter = express.Router();
 var authRouter = express.Router();
 
-
 // Initialize Passport;
 app.use( passport.initialize() );
 // Passport middleware passed through, populates req.user if successful
@@ -25,12 +24,12 @@ require('./lib/basic_strategy')( passport );
 require('./routes/emperors_router')( emperorsRouter, passport );
 require('./routes/authorization_router')( authRouter, passport );
 
+app.use('/', express.static( __dirname + '/public'), function( req, res, next ) {
+  next();
+});
 app.use('/api', emperorsRouter );
 app.use('/users', authRouter );
 
-app.use( '/*', express.static( __dirname + '/public/index.html'), function( req, res, next ) {
-  next();
-});
 
 app.listen(port, function() {
   console.log('Server started on port ' + port);
