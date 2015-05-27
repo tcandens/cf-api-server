@@ -5,6 +5,27 @@ var $ = require('jquery');
 var $app = $('#app');
 var $emperorList = $('#emperors');
 
+$('#login').on('submit', function( e ) {
+  e.preventDefault();
+  var username = $('#username').val();
+  var password = $('#password').val();
+  $.ajax({
+    url: 'http://localhost:3000/users/login',
+    method: 'GET',
+    contentType: 'application/json',
+    headers: {"Authorization": "Basic " + btoa(username + ":" + password) }
+  })
+    .done(function( data ) {
+      console.log( data );
+    })
+    .fail(function( err ) {
+      console.log( err );
+    })
+    .always(function() {
+      console.log( 'Form submitted' );
+    })
+});
+
 $.ajax({
   url: 'http://localhost:3000/api/emperor',
   method: 'GET',
