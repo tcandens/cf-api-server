@@ -9,13 +9,19 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "browser-sync": "^2.7.5",
     "chai": "^2.3.0",
     "chai-http": "^1.0.0",
+    "del": "^1.2.0",
     "gulp": "^3.8.11",
     "gulp-jshint": "^1.10.0",
     "gulp-mocha": "^2.0.1",
+    "gulp-webpack": "^1.4.0",
     "jshint-stylish": "^1.0.2",
-    "mocha": "^2.2.4"
+    "mocha": "^2.2.4",
+    "node-libs-browser": "^0.5.2",
+    "stylus": "^0.51.1",
+    "webpack": "^1.9.10"
   },
   "dependencies": {
     "bcrypt": "^0.8.3",
