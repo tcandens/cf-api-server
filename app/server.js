@@ -1,7 +1,7 @@
 'use strict';
 
 // Global Variables
-var port = process.env.PORT || 3000;
+var port = process.env.PORT || 4000;
 process.env.SECRET = process.env.SECRET || 'changemechangemechangeme!'
 
 // Dependancies
@@ -15,6 +15,7 @@ var app = express();
 var emperorsRouter = express.Router();
 var authRouter = express.Router();
 
+
 // Initialize Passport;
 app.use( passport.initialize() );
 // Passport middleware passed through, populates req.user if successful
@@ -27,8 +28,8 @@ require('./routes/authorization_router')( authRouter, passport );
 app.use('/api', emperorsRouter );
 app.use('/users', authRouter );
 
-app.get('/', function(req, res) {
-  res.json({message: 'Welcome, our API of Roman Emperors housed at the /api URL.'});
+app.use( '/*', express.static( __dirname + '/public/index.html'), function( req, res, next ) {
+  next();
 });
 
 app.listen(port, function() {
