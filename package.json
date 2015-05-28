@@ -17,6 +17,7 @@
     "gulp-jshint": "^1.10.0",
     "gulp-mocha": "^2.0.1",
     "gulp-nodemon": "^2.0.3",
+    "gulp-stylus": "^2.0.2",
     "gulp-webpack": "^1.4.0",
     "jquery": "^2.1.4",
     "jshint-stylish": "^1.0.2",

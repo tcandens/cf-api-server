@@ -60,7 +60,7 @@ var fetchEmperors = function() {
       console.log( data );
       $('#emperors').html('');
       data.forEach(function( emperor ) {
-        var newHTML = '</li>\n' +
+        var newHTML = '</li class="emperor">\n' +
                       '<h2>' + emperor.name + '</h2>\n' +
                       '<p>Birth: ' + ( emperor.birth || 'No Data' ) +
                       ' Death: ' + ( emperor.death || 'No Data' ) + '</p></li>';

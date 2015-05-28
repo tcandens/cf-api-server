@@ -1,19 +1,26 @@
 'use strict';
 
-var config = require('./.siteconfig');
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
 var webpack = require('gulp-webpack');
 var nodemon = require('gulp-nodemon');
 var del = require('del');
-var browserSync = require('browser-sync').create();
+var stylus = require('gulp-stylus');
+var browserSync = require('browser-sync');
 var reload = browserSync.reload;
+var bs;
 
 gulp.task('clean:build', function() {
   return del(['build/'], function( err, res ) {
     if ( err ) console.log( err );
   });
+});
+
+gulp.task('stylus:build', function() {
+  return gulp.src('./app/public/stylus/main.styl')
+    .pipe(stylus())
+    .pipe(gulp.dest('./build/public/css/'));
 });
 
 gulp.task('webpack:build', function() {
@@ -42,14 +49,14 @@ gulp.task('copy:buildhtml', function() {
 });
 gulp.task('copy:build', ['copy:buildjs', 'copy:buildhtml']);
 
-gulp.task('nodemonTask', ['copy:buildjs'], function() {
+gulp.task('nodemonTask', function() {
   nodemon({
     script: 'build/server.js'
   });
 });
 
 gulp.task('sync:build', ['nodemonTask'], function() {
-  browserSync({
+  browserSync.init({
     proxy: {
       host: 'http://localhost:3000',
     }
@@ -68,11 +75,12 @@ gulp.task('test', ['lint'], function() {
 });
 
 gulp.task('watch:build', function() {
-  gulp.watch(['app/public/**/*.html'], ['copy:buildhtml']);
-  gulp.watch(['app/public/**/*.js'], ['webpack:build']);
+  gulp.watch(['app/public/**/*.html'], ['copy:buildhtml', reload ]);
+  gulp.watch(['app/public/**/*.js'], ['webpack:build', reload ]);
+  gulp.watch(['app/public/stylus/**/*.styl'], ['stylus:build', reload ]);
   gulp.watch(['app/server.js', 'app/lib/**/*.js', 'app/models/**/*.js', 'app/routes/**/*.js'], ['copy:buildjs']);
 });
 
-gulp.task('serve:dev', ['copy:build', 'webpack:build', 'nodemonTask', 'watch:build' ]);
+gulp.task('serve:dev', ['copy:build', 'stylus:build', 'webpack:build', 'sync:build', 'watch:build']);
 gulp.task('default', ['lint', 'test']);
 gulp.task('serve', ['lint', 'test', ])
