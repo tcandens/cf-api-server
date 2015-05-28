@@ -9,6 +9,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "angular": "^1.4.0",
     "browser-sync": "^2.7.5",
     "chai": "^2.3.0",
     "chai-http": "^1.0.0",

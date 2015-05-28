@@ -5,27 +5,18 @@
     <title>Emperors API</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/css/main.css" media="screen" title="no title" charset="utf-8">
+    <link rel="stylesheet" href="/css/main.css" media="screen" charset="utf-8">
   </head>
-  <body>
-    <section id="login">
-      <form>
-        <input id="username" type="text" placeholder="Username">
-        <input id="password" type="password" placeholder="Password">
-        <input type="submit">
-      </form>
-    </section>
-    <section id="addEmperor">
-      <form>
-        <input type="text" id="emperorName" placeholder="Name">
-        <input type="text" id="emperorBirth" placeholder="Birth">
-        <input type="text" id="emperorDeath" placeholder="Death">
-        <input type="submit">
-      </form>
-    </section>
+  <body data-ng-app="emperorsApp">
     <h1>Emperors!</h1>
-    <main id="app">
-      <ul id="emperors">
+    <main data-ng-controller="emperorsController" data-ng-init="fetchAll()">
+      <h1>Here Be Emperors:</h1>
+      <ul id="emperors" data-ng-repeat="emperor in emperors">
+        <li>
+          <h3 class="name">{{ emperor.name }}</h3>
+          <p>Birth: {{ emperor.birth }}</p>
+          <p>Death: {{ emperor.death }}</p>
+        </li>
       </ul>
     </main>
     <script src="js/bundle.js"></script>

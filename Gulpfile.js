@@ -75,9 +75,9 @@ gulp.task('test', ['lint'], function() {
 });
 
 gulp.task('watch:build', function() {
-  gulp.watch(['app/public/**/*.html'], ['copy:buildhtml', reload ]);
-  gulp.watch(['app/public/**/*.js'], ['webpack:build', reload ]);
-  gulp.watch(['app/public/stylus/**/*.styl'], ['stylus:build', reload ]);
+  gulp.watch(['app/public/**/*.html'], ['copy:buildhtml']);
+  gulp.watch(['app/public/**/*.js'], ['webpack:build' ]);
+  gulp.watch(['app/public/stylus/**/*.styl'], ['stylus:build' ]);
   gulp.watch(['app/server.js', 'app/lib/**/*.js', 'app/models/**/*.js', 'app/routes/**/*.js'], ['copy:buildjs']);
 });
 
