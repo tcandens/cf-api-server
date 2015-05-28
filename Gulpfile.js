@@ -33,6 +33,16 @@ gulp.task('webpack:build', function() {
     .pipe(gulp.dest('build/public/js/'));
 });
 
+gulp.task('webpack:testclient', function() {
+  return gulp.src('test/client/test.js')
+    .pipe(webpack({
+      output: {
+        filename: 'test-bundle.js'
+      }
+    }))
+    .pipe(gulp.dest('test/client/'));
+});
+
 gulp.task('lint', function() {
   gulp.src(['./lib/**/*.js', './Gruntfile.js'])
     .pipe(jshint())
