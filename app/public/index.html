@@ -28,7 +28,7 @@
         <button type="submit">Add Emperor</button>
       </form>
       <!-- ## LIST OF EMPEROR MODELS -->
-      <ul id="emperors" data-ng-repeat="emperor in emperors">
+      <ul id="emperors" data-ng-repeat="emperor in emperors | orderBy:'id':true">
         <li>
           <button data-ng-click="destroyEmperor( emperor )">X</button>
           <h3 class="name">{{ emperor.name }}</h3>

@@ -4,7 +4,8 @@
   "description": "Codefellows project",
   "main": "index.js",
   "scripts": {
-    "test": "grunt test"
+    "test": "gulp test",
+    "start": "gulp serve:dev"
   },
   "author": "",
   "license": "MIT",

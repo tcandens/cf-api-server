@@ -49,14 +49,23 @@ module.exports = function( app ) {
     };
 
     $scope.editEmperor = function( emperor ) {
-      console.log( emperor );
+      // Find any other open editing forms
+      var editing = $scope.emperors.filter( function( emp ) {
+        return emp.editing;
+      });
+      // Close other editing forms if open
+      if ( editing.length ) {
+        editing.forEach(function( el ) {
+          el.editing = false;
+        });
+      };
       $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = true;
       $scope.editingEmperor = angular.copy( emperor );
     };
 
     $scope.cancelEditEmperor = function( emperor ) {
       $scope.emperors[ $scope.emperors.indexOf( emperor ) ] = $scope.editingEmperor;
-      $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;
-    }
+      $scope.emperors[ $scope.emperors.indexOf( $scope.editingEmperor ) ].editing = false;
+    };
   }]);
 };
