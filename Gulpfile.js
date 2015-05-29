@@ -76,11 +76,11 @@ gulp.task('test', ['lint'], function() {
 
 gulp.task('watch:build', function() {
   gulp.watch(['app/public/**/*.html'], ['copy:buildhtml']);
-  gulp.watch(['app/public/**/*.js'], ['webpack:build' ]);
+  gulp.watch(['app/public/js/**/*.js'], ['webpack:build' ]);
   gulp.watch(['app/public/stylus/**/*.styl'], ['stylus:build' ]);
   gulp.watch(['app/server.js', 'app/lib/**/*.js', 'app/models/**/*.js', 'app/routes/**/*.js'], ['copy:buildjs']);
 });
 
-gulp.task('serve:dev', ['copy:build', 'stylus:build', 'webpack:build', 'sync:build', 'watch:build']);
+gulp.task('serve:dev', ['copy:build', 'stylus:build', 'webpack:build', 'watch:build', 'sync:build']);
 gulp.task('default', ['lint', 'test']);
 gulp.task('serve', ['lint', 'test', ])

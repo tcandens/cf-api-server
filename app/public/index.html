@@ -8,13 +8,40 @@
     <link rel="stylesheet" href="/css/main.css" media="screen" charset="utf-8">
   </head>
   <body data-ng-app="emperorsApp">
+    <!-- ## ERROR HANDLING DIALOGUE -->
+    <aside data-ng-if="errors.length">
+      <h3>Error!</h3>
+      <ul data-ng-repeat="error in errors">
+        <li>{{ error.message }}</li>
+      </ul>
+      <button data-ng-click="clearErrors()">Clear Errors</button>
+    </aside>
+
+    <!-- # EMPERORS_CONTROLLER -->
     <main data-ng-controller="emperorsController" data-ng-init="fetchAll()">
       <h1>Here Be Emperors:</h1>
+      <!-- ## ADD NEW EMPEROR FORM -->
+      <form name="addEmperorForm" data-ng-model="newEmperor" id="addEmperorForm" data-ng-submit="addEmperor()">
+        <input type="text" required data-ng-model="newEmperor.name" placeholder="Name">
+        <input type="text" required data-ng-model="newEmperor.birth" placeholder="Birth">
+        <input type="text" required data-ng-model="newEmperor.death" placeholder="Death">
+        <button type="submit">Add Emperor</button>
+      </form>
+      <!-- ## LIST OF EMPEROR MODELS -->
       <ul id="emperors" data-ng-repeat="emperor in emperors">
         <li>
+          <button data-ng-click="destroyEmperor( emperor )">X</button>
           <h3 class="name">{{ emperor.name }}</h3>
           <p>Birth: {{ emperor.birth }}</p>
           <p>Death: {{ emperor.death }}</p>
+          <button data-ng-if="!emperor.editing" data-ng-click="emperor.editing = true">Edit</button>
+          <form name="{{'editing' + emperor.id}}" data-ng-model="newEmperor" data-ng-if="emperor.editing" data-ng-submit="saveEmperor( emperor )">
+            <button data-ng-click="emperor.editing = false">Cancel</button>
+            <input type="text" data-ng-model="newEmperor.name">
+            <input type="text" data-ng-model="newEmperor.birth">
+            <input type="text" data-ng-model="newEmperor.death">
+            <input type="submit">
+          </form>
         </li>
       </ul>
     </main>
