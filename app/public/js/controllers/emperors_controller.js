@@ -38,13 +38,25 @@ module.exports = function( app ) {
     };
 
     $scope.saveEmperor = function( emperor ) {
+      console.log( emperor );
       $http.put('/api/emperor/' + emperor.id, emperor )
         .success(function( data ) {
-          emperor.editing = null;
+          $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;
         })
         .error(function( err ) {
           $scope.errors.push( err );
         })
     };
+
+    $scope.editEmperor = function( emperor ) {
+      console.log( emperor );
+      $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = true;
+      $scope.editingEmperor = angular.copy( emperor );
+    };
+
+    $scope.cancelEditEmperor = function( emperor ) {
+      $scope.emperors[ $scope.emperors.indexOf( emperor ) ] = $scope.editingEmperor;
+      $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;
+    }
   }]);
 };

@@ -34,12 +34,12 @@
           <h3 class="name">{{ emperor.name }}</h3>
           <p>Birth: {{ emperor.birth }}</p>
           <p>Death: {{ emperor.death }}</p>
-          <button data-ng-if="!emperor.editing" data-ng-click="emperor.editing = true">Edit</button>
-          <form name="{{'editing' + emperor.id}}" data-ng-model="newEmperor" data-ng-if="emperor.editing" data-ng-submit="saveEmperor( emperor )">
-            <button data-ng-click="emperor.editing = false">Cancel</button>
-            <input type="text" data-ng-model="newEmperor.name">
-            <input type="text" data-ng-model="newEmperor.birth">
-            <input type="text" data-ng-model="newEmperor.death">
+          <button data-ng-if="!emperor.editing" data-ng-click="editEmperor( emperor )">Edit</button>
+          <form name="{{'editing' + emperor.id}}" data-ng-if="emperor.editing" data-ng-submit="saveEmperor( emperor )">
+            <button data-ng-click="cancelEditEmperor( emperor )">Cancel</button>
+            <input type="text" data-ng-model="emperor.name">
+            <input type="text" data-ng-model="emperor.birth">
+            <input type="text" data-ng-model="emperor.death">
             <input type="submit">
           </form>
         </li>
