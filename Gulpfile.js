@@ -6,6 +6,7 @@ var mocha = require('gulp-mocha');
 var webpack = require('gulp-webpack');
 var nodemon = require('gulp-nodemon');
 var del = require('del');
+var karma = require('karma').server;
 var stylus = require('gulp-stylus');
 var browserSync = require('browser-sync');
 var reload = browserSync.reload;
@@ -32,6 +33,16 @@ gulp.task('webpack:build', function() {
     }))
     .pipe(gulp.dest('build/public/js/'));
 });
+
+gulp.task('webpack:karma', function() {
+  return gulp.src('test/karma/index_test.js')
+    .pipe(webpack({
+      output: {
+        filename: 'test_bundle.js'
+      }
+    }))
+    .pipe(gulp.dest('test/karma/'));
+})
 
 gulp.task('lint', function() {
   gulp.src(['./lib/**/*.js', './Gruntfile.js'])
@@ -63,7 +74,7 @@ gulp.task('sync:build', ['nodemonTask'], function() {
   });
 });
 
-gulp.task('test', ['lint'], function() {
+gulp.task('mocha', ['lint'], function() {
   gulp.src(['./test/**/*.js'])
     .pipe(mocha({reporter:'list'}))
     .once('error', function() {
@@ -74,6 +85,13 @@ gulp.task('test', ['lint'], function() {
     });
 });
 
+gulp.task('karma', ['webpack:karma'], function( done ) {
+  karma.start({
+    configFile: __dirname + '/karma.conf.js',
+    singleRun: true
+  }, done );
+})
+
 gulp.task('watch:build', function() {
   gulp.watch(['app/public/**/*.html'], ['copy:buildhtml']);
   gulp.watch(['app/public/js/**/*.js'], ['webpack:build' ]);
@@ -81,6 +99,6 @@ gulp.task('watch:build', function() {
   gulp.watch(['app/server.js', 'app/lib/**/*.js', 'app/models/**/*.js', 'app/routes/**/*.js'], ['copy:buildjs']);
 });
 
-gulp.task('serve:dev', ['copy:build', 'stylus:build', 'webpack:build', 'watch:build', 'sync:build']);
-gulp.task('default', ['lint', 'test']);
-gulp.task('serve', ['lint', 'test', ])
+gulp.task('serve', ['copy:build', 'stylus:build', 'webpack:build', 'watch:build', 'sync:build']);
+gulp.task('test', ['lint', 'mocha']);
+gulp.task('default', ['serve']);
