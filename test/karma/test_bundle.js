@@ -86,8 +86,8 @@
 
 	  describe('REST actions', function() {
 
-	    beforeEach(angular.mock.inject(function(_$httpBackend_) {
-	      $httpBackend = _$httpBackend_;
+	    beforeEach(angular.mock.inject(function($injector) {
+	      $httpBackend = $injector.get('$httpBackend');
 	      this.notesController = $ControllerContructor('emperorsController', { $scope: $scope });
 	    }));
 
