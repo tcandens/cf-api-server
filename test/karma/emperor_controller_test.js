@@ -19,7 +19,7 @@ describe('Emperors controller', function() {
 
     beforeEach(angular.mock.inject(function($injector) {
       $httpBackend = $injector.get('$httpBackend');
-      this.notesController = $ControllerContructor('emperorsController', { $scope: $scope });
+      this.emperorsController = $ControllerContructor('emperorsController', { $scope: $scope });
     }));
 
     afterEach(function() {
