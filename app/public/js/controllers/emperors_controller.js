@@ -38,7 +38,6 @@ module.exports = function( app ) {
     };
 
     $scope.saveEmperor = function( emperor ) {
-      console.log( emperor );
       $http.put('/api/emperor/' + emperor.id, emperor )
         .success(function( data ) {
           $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;

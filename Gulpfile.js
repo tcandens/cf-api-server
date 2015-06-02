@@ -45,7 +45,7 @@ gulp.task('webpack:karma', function() {
 })
 
 gulp.task('lint', function() {
-  gulp.src(['./lib/**/*.js', './Gruntfile.js'])
+  gulp.src(['./app/**/*.js', './Gulpfile.js'])
     .pipe(jshint())
     .pipe(jshint.reporter('jshint-stylish'));
 });

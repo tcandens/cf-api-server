@@ -17,7 +17,7 @@ module.exports = function( passport ) {
         user.checkPassword( password, function( err, res ) {
           if ( !res ) done( err, false );
           if ( res ) done( null, user );
-        })
-      })
-  }))
-}
+        });
+      });
+  }));
+};

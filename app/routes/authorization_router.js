@@ -27,14 +27,14 @@ var authRouter = module.exports = function( router, passport ) {
               return res.status(500).json({ message: "Cannot generate token" });
             }
             res.json({ message: 'User created', token: token });
-          })
+          });
         })
         .catch(function( err ) {
           res.json({ message: 'Cannot create user' });
           console.log('Trouble creating user: ' + err );
-        })
-    })
-  })
+        });
+    });
+  });
 
   router.get('/login', passport.authenticate('basic', { session: false }),
     function( req, res ) {
@@ -47,5 +47,5 @@ var authRouter = module.exports = function( router, passport ) {
         res.cookie('empToken', token, { maxAge: 160000, httpOnly: false });
         res.json({ "token": token });
       });
-  })
-}
+  });
+};
