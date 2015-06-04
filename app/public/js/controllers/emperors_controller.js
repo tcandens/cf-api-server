@@ -5,6 +5,7 @@ module.exports = function( app ) {
     var Emperor = $rest('emperor');
     $scope.emperors = [];
     $scope.errors = [];
+    $scope.title = 'here be emperors';
 
     $scope.fetchAll = function() {
       Emperor.fetchAll( function( err, data ) {

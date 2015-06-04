@@ -11,3 +11,4 @@ require('./services/rest_resource')( emperorsApp );
 require('./controllers/emperors_controller')( emperorsApp );
 
 // DIRECTIVES
+require('./directives/test_directive')( emperorsApp );

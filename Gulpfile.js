@@ -55,7 +55,7 @@ gulp.task('copy:buildjs', function() {
     .pipe(gulp.dest('build'));
 });
 gulp.task('copy:buildhtml', function() {
-  return gulp.src(['app/public/index.html'])
+  return gulp.src(['app/public/**/*.html'])
     .pipe(gulp.dest('build/public/'));
 });
 gulp.task('copy:build', ['copy:buildjs', 'copy:buildhtml']);
