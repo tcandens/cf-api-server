@@ -23,6 +23,7 @@
     "gulp-nodemon": "^2.0.3",
     "gulp-stylus": "^2.0.2",
     "gulp-webpack": "^1.4.0",
+    "html-loader": "^0.3.0",
     "jasmine-core": "^2.3.4",
     "jquery": "^2.1.4",
     "jshint-stylish": "^1.0.2",

@@ -19,7 +19,7 @@
 
     <!-- # EMPERORS_CONTROLLER -->
     <main data-ng-controller="emperorsController" data-ng-init="fetchAll()">
-      <div data-test-directive></div>
+      <data-test-directive></data-test-directive>
       <!-- ## ADD NEW EMPEROR FORM -->
       <form name="addEmperorForm" data-ng-model="newEmperor" id="addEmperorForm" data-ng-submit="addEmperor()">
         <input type="text" required data-ng-model="newEmperor.name" placeholder="Name">

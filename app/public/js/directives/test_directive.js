@@ -1,10 +1,12 @@
 'use strict';
 
+var template = require('html!./templates/tester.html');
+
 module.exports = function( app ) {
   app.directive('testDirective', function() {
     return {
       restrict: 'EA',
-      templateUrl: 'js/directives/templates/tester.html',
+      template: template,
     }
   });
 }
