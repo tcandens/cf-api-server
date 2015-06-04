@@ -47,7 +47,6 @@
 	'use strict';
 
 	__webpack_require__(1);
-	__webpack_require__(2)
 
 
 /***/ },
@@ -56,21 +55,8 @@
 
 	'use strict';
 
-	describe('Karma testing', function() {
-	  it('should be dumb', function() {
-
-	  });
-	});
-
-
-/***/ },
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
+	__webpack_require__(2);
 	__webpack_require__(3);
-	__webpack_require__(4);
 
 	describe('Emperors controller', function() {
 	  var $ControllerContructor;
@@ -107,7 +93,7 @@
 	    it('should save a new emperor', function() {
 	      $scope.newEmperor = {name: 'Tim', birth: 100, death: 100};
 	      $httpBackend.expectPOST('/api/emperor').respond(200, $scope.newEmperor);
-	      $scope.addEmperor( $scope.newEmperor );
+	      $scope.addEmperor();
 	      $httpBackend.flush();
 	      expect($scope.emperors[0].name).toBe('Tim');
 	      expect($scope.newEmperor).toBe(null);
@@ -140,7 +126,7 @@
 
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -149,11 +135,17 @@
 
 	var emperorsApp = angular.module('emperorsApp', []);
 
+	// SERVICES
+	__webpack_require__(4)( emperorsApp );
+
+	// CONTROLLERS
 	__webpack_require__(5)( emperorsApp );
+
+	// DIRECTIVES
 
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2611,58 +2603,103 @@
 
 
 /***/ },
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = function( app ) {
+
+	  var handleError = function( callback ) {
+	    return function( data ) {
+	      console.log( data );
+	      callback( data );
+	    }
+	  };
+	  var handleSuccess = function( callback ) {
+	    return function( data ) {
+	      console.log( data );
+	      callback( null, data );
+	    }
+	  };
+
+	  app.factory( '$REST', [ '$http', function( $http ) {
+	    return function( resourceName ) {
+	      return {
+	        fetchAll: function( callback ) {
+	          $http.get('/api/' + resourceName )
+	            .success( handleSuccess( callback ) )
+	            .error( handleError( callback ) );
+	        },
+	        add: function( resourceData, callback ) {
+	          $http.post('/api/' + resourceName, resourceData )
+	            .success( handleSuccess( callback ) )
+	            .error( handleError( callback ) );
+	        },
+	        save: function( resourceData, callback ) {
+	          $http.put('/api/' + resourceName + '/' + resourceData.id, resourceData )
+	            .success( handleSuccess( callback ) )
+	            .error( handleError( callback ) );
+	        },
+	        destroy: function( resourceData, callback ) {
+	          $http.delete('/api/' + resourceName + '/' + resourceData.id )
+	            .success( handleSuccess( callback ) )
+	            .error( handleError( callback ) );
+	        }
+	      }
+	    };
+	  }]);
+	};
+
+
+/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	module.exports = function( app ) {
-	  app.controller( 'emperorsController', [ '$scope', '$http', function( $scope, $http ) {
+	  app.controller( 'emperorsController', [ '$scope', '$REST', '$http', function( $scope, $rest, $http ) {
+	    var Emperor = $rest('emperor');
 	    $scope.emperors = [];
 	    $scope.errors = [];
 
 	    $scope.fetchAll = function() {
-	      $http.get('/api/emperor')
-	        .success(function( data ) {
-	          $scope.emperors = data;
-	        })
-	        .error(function( err ) {
-	          console.log( err );
-	          $scope.errors.push( err );
-	        })
-	    };
-
+	      Emperor.fetchAll( function( err, data ) {
+	        if ( err ) return $scope.errors.push( { message: 'Could not fetch emperors' } );
+	        $scope.emperors = data;
+	      });
+	    }
 	    $scope.addEmperor = function() {
-	      $http.post('/api/emperor', $scope.newEmperor )
-	        .success(function( data ) {
-	          $scope.emperors.push( $scope.newEmperor );
-	          $scope.newEmperor = null;
-	        })
-	        .error(function( err ) {
-	          console.log( err );
-	          $scope.errors.push( err );
-	        })
-	    };
-
+	      Emperor.add( $scope.newEmperor, function( err, data ) {
+	        if ( err ) return $scope.errors.push( { message: 'Could not add emperors' } );
+	        $scope.emperors.push( $scope.newEmperor );
+	      });
+	    }
 	    $scope.destroyEmperor = function( emperor ) {
 	      $scope.emperors.splice( $scope.emperors.indexOf( emperor ), 1 );
-	      $http.delete('/api/emperor/' + emperor.id )
-	        .error(function( err ) {
-	          console.log( err );
-	          $scope.errors.push( err );
-	        })
-	    };
+	      Emperor.destroy( emperor, function( err, data ) {
+	        if ( err ) return $scope.errors.push( { message: 'Could not depose emperor' } );
+	      });
+	    }
 
 	    $scope.saveEmperor = function( emperor ) {
-	      $http.put('/api/emperor/' + emperor.id, emperor )
-	        .success(function( data ) {
-	          $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;
-	        })
-	        .error(function( err ) {
-	          $scope.errors.push( err );
-	        })
-	    };
+	      Emperor.save( emperor, function( err, data ) {
+	        if ( err ) return $scope.errors.push( { message: 'Could not modify emperor' } );
+	        $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;
+	      });
+	    }
 
+	    // $scope.saveEmperor = function( emperor ) {
+	    //   $http.put('/api/emperor/' + emperor.id, emperor )
+	    //     .success(function( data ) {
+	    //       $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;
+	    //     })
+	    //     .error(function( err ) {
+	    //       $scope.errors.push( err );
+	    //     })
+	    // };
+	    //
 	    $scope.editEmperor = function( emperor ) {
 	      // Find any other open editing forms
 	      var editing = $scope.emperors.filter( function( emp ) {

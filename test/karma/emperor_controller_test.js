@@ -38,7 +38,7 @@ describe('Emperors controller', function() {
     it('should save a new emperor', function() {
       $scope.newEmperor = {name: 'Tim', birth: 100, death: 100};
       $httpBackend.expectPOST('/api/emperor').respond(200, $scope.newEmperor);
-      $scope.addEmperor( $scope.newEmperor );
+      $scope.addEmperor();
       $httpBackend.flush();
       expect($scope.emperors[0].name).toBe('Tim');
       expect($scope.newEmperor).toBe(null);

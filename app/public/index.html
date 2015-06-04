@@ -1,4 +1,4 @@
-<!doctype html>
+ <!doctype html>
 <html class="no-js" lang="">
   <head>
     <meta charset="utf-8">
@@ -34,9 +34,9 @@
           <h3 class="name">{{ emperor.name }}</h3>
           <p>Birth: {{ emperor.birth }}</p>
           <p>Death: {{ emperor.death }}</p>
-          <button data-ng-if="!emperor.editing" data-ng-click="editEmperor( emperor )">Edit</button>
+          <button data-ng-if="!emperor.editing" data-ng-click="toggleEdit( emperor )">Edit</button>
           <form name="{{'editing' + emperor.id}}" data-ng-if="emperor.editing" data-ng-submit="saveEmperor( emperor )">
-            <button data-ng-click="cancelEditEmperor( emperor )">Cancel</button>
+            <button data-ng-click="toggleEdit( emperor )">Cancel</button>
             <input type="text" data-ng-model="emperor.name">
             <input type="text" data-ng-model="emperor.birth">
             <input type="text" data-ng-model="emperor.death">

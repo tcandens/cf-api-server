@@ -34,7 +34,7 @@ gulp.task('webpack:build', function() {
     .pipe(gulp.dest('build/public/js/'));
 });
 
-gulp.task('webpack:karma', function() {
+gulp.task('webpack:karma', ['webpack:build'], function() {
   return gulp.src('test/karma/index_test.js')
     .pipe(webpack({
       output: {

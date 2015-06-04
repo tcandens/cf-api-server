@@ -1,70 +1,53 @@
 'use strict';
 
 module.exports = function( app ) {
-  app.controller( 'emperorsController', [ '$scope', '$http', function( $scope, $http ) {
+  app.controller( 'emperorsController', [ '$scope', '$REST', '$http', function( $scope, $rest, $http ) {
+    var Emperor = $rest('emperor');
     $scope.emperors = [];
     $scope.errors = [];
 
     $scope.fetchAll = function() {
-      $http.get('/api/emperor')
-        .success(function( data ) {
-          $scope.emperors = data;
-        })
-        .error(function( err ) {
-          console.log( err );
-          $scope.errors.push( err );
-        })
-    };
-
+      Emperor.fetchAll( function( err, data ) {
+        if ( err ) return $scope.errors.push( { message: 'Could not fetch emperors' } );
+        $scope.emperors = data;
+      });
+    }
     $scope.addEmperor = function() {
-      $http.post('/api/emperor', $scope.newEmperor )
-        .success(function( data ) {
-          $scope.emperors.push( $scope.newEmperor );
-          $scope.newEmperor = null;
-        })
-        .error(function( err ) {
-          console.log( err );
-          $scope.errors.push( err );
-        })
-    };
-
+      Emperor.add( $scope.newEmperor, function( err, data ) {
+        if ( err ) return $scope.errors.push( { message: 'Could not add emperors' } );
+        // Break Binding with form
+        var pushEmperor = angular.copy( $scope.newEmperor );
+        $scope.emperors.push( pushEmperor );
+      });
+    }
     $scope.destroyEmperor = function( emperor ) {
       $scope.emperors.splice( $scope.emperors.indexOf( emperor ), 1 );
-      $http.delete('/api/emperor/' + emperor.id )
-        .error(function( err ) {
-          console.log( err );
-          $scope.errors.push( err );
-        })
-    };
-
-    $scope.saveEmperor = function( emperor ) {
-      $http.put('/api/emperor/' + emperor.id, emperor )
-        .success(function( data ) {
-          $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;
-        })
-        .error(function( err ) {
-          $scope.errors.push( err );
-        })
-    };
-
-    $scope.editEmperor = function( emperor ) {
-      // Find any other open editing forms
-      var editing = $scope.emperors.filter( function( emp ) {
-        return emp.editing;
+      Emperor.destroy( emperor, function( err, data ) {
+        if ( err ) return $scope.errors.push( { message: 'Could not depose emperor' } );
       });
-      // Close other editing forms if open
-      if ( editing.length ) {
-        editing.forEach(function( el ) {
+    }
+    $scope.saveEmperor = function( emperor ) {
+      Emperor.save( emperor, function( err, data ) {
+        if ( err ) return $scope.errors.push( { message: 'Could not modify emperor' } );
+        $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = false;
+      });
+    }
+    $scope.toggleEdit = function( emperor ) {
+      // Cancel editing
+      if ( emperor.editing ) {
+        $scope.emperors[ $scope.emperors.indexOf( emperor ) ] = $scope.editingEmperor;
+        $scope.emperors[ $scope.emperors.indexOf( $scope.editingEmperor ) ].editing = false
+      } else {
+        // Close all other edits
+        $scope.emperors.filter( function( e ) {
+          return e.editing;
+        }).forEach(function( el ) {
           el.editing = false;
         });
-      };
+      }
+      // If nothing, open edit and copy object to break binding
       $scope.emperors[ $scope.emperors.indexOf( emperor ) ].editing = true;
       $scope.editingEmperor = angular.copy( emperor );
-    };
-
-    $scope.cancelEditEmperor = function( emperor ) {
-      $scope.emperors[ $scope.emperors.indexOf( emperor ) ] = $scope.editingEmperor;
-      $scope.emperors[ $scope.emperors.indexOf( $scope.editingEmperor ) ].editing = false;
-    };
+    }
   }]);
 };
