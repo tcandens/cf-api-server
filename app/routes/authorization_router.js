@@ -2,7 +2,6 @@
 
 var express = require('express');
 var bodyParser = require('body-parser');
-// var cookieParser = require('cookie-parser');
 var User = require('../models/User');
 
 var authRouter = module.exports = function( router, passport ) {
@@ -43,8 +42,6 @@ var authRouter = module.exports = function( router, passport ) {
           console.log( err );
           return res.status(500).json({ message: "Cannot generate token" });
         }
-        // res.clearCookie('empToken');
-        // res.cookie('empToken', token, { maxAge: 160000, httpOnly: false });
         res.json({ "token": token });
       });
   });

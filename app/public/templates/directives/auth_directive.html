@@ -1,0 +1,8 @@
+<section id="auth-check">
+  <div data-ng-if="checkLogin()">
+    <a data-ng-click="logout()">Log Out</a>
+  </div>
+  <div data-ng-if="!checkLogin()">
+    <a data-ng-click="loginRedirect()">Login</a>
+  </div>
+</section>

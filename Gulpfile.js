@@ -71,7 +71,7 @@ gulp.task('sync:build', ['nodemonTask'], function() {
     proxy: {
       target: 'localhost:3000',
     },
-    port: 3002
+    port: 3000
   });
 });
 
@@ -100,6 +100,6 @@ gulp.task('watch:build', function() {
   gulp.watch(['app/server.js', 'app/lib/**/*.js', 'app/models/**/*.js', 'app/routes/**/*.js'], ['copy:buildjs', reload ]);
 });
 
-gulp.task('serve', ['copy:build', 'stylus:build', 'webpack:build', 'watch:build', 'sync:build']);
+gulp.task('serve', ['copy:build', 'stylus:build', 'webpack:build', 'watch:build', 'nodemonTask']);
 gulp.task('test', ['lint', 'mocha']);
 gulp.task('default', ['serve']);

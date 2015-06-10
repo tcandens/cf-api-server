@@ -5,7 +5,7 @@ var User = require('../models/User');
 
 module.exports = function( secret ) {
   return function( req, res, next ) {
-    var token = req.headers.empToken || req.body.empToken || req.cookies.empToken;
+    var token = req.cookies.empToken;
     if ( !token ) {
       console.log( 'Not token' );
       return res.status(400).json({ message: 'Unauthorized' });
