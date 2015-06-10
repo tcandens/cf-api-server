@@ -70,7 +70,8 @@ gulp.task('sync:build', ['nodemonTask'], function() {
   browserSync.init({
     proxy: {
       target: 'localhost:3000',
-    }
+    },
+    port: 3002
   });
 });
 
@@ -93,10 +94,10 @@ gulp.task('karma', ['webpack:karma'], function( done ) {
 })
 
 gulp.task('watch:build', function() {
-  gulp.watch(['app/public/**/*.html'], ['copy:buildhtml']);
-  gulp.watch(['app/public/js/**/*.js'], ['webpack:build' ]);
-  gulp.watch(['app/public/stylus/**/*.styl'], ['stylus:build' ]);
-  gulp.watch(['app/server.js', 'app/lib/**/*.js', 'app/models/**/*.js', 'app/routes/**/*.js'], ['copy:buildjs']);
+  gulp.watch(['app/public/**/*.html'], ['copy:buildhtml', reload ]);
+  gulp.watch(['app/public/js/**/*.js'], ['webpack:build', reload ]);
+  gulp.watch(['app/public/stylus/**/*.styl'], ['stylus:build', reload ]);
+  gulp.watch(['app/server.js', 'app/lib/**/*.js', 'app/models/**/*.js', 'app/routes/**/*.js'], ['copy:buildjs', reload ]);
 });
 
 gulp.task('serve', ['copy:build', 'stylus:build', 'webpack:build', 'watch:build', 'sync:build']);

@@ -9,7 +9,7 @@ var express = require('express');
 var Sql = require('sequelize');
 var passport = require('passport');
 var auth = require('./lib/auth-middleware');
-var cookieParser = require('cookie-parser');
+// var cookieParser = require('cookie-parser');
 
 var app = express();
 // Declare Empty Routers to be Passed Through
@@ -18,7 +18,7 @@ var authRouter = express.Router();
 
 // Initialize Passport;
 app.use( passport.initialize() );
-app.use( cookieParser() );
+// app.use( cookieParser() );
 // Passport middleware passed through, populates req.user if successful
 require('./lib/basic_strategy')( passport );
 

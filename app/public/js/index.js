@@ -21,7 +21,14 @@ emperorsApp.config(['$routeProvider', function( $routeProvider ) {
       templateUrl: 'js/views/templates/emperors_list.html',
       controller: 'emperorsController'
     })
+    .when('/login', {
+      templateUrl: 'js/views/templates/login_form.html',
+      controller: 'authorizationController'
+    })
     .when('/', {
-      redirectTo: '/notes'
+      redirectTo: '/emperors'
+    })
+    .otherwise({
+      redirectTo: '/login'
     })
 }]);
