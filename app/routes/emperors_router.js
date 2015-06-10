@@ -9,6 +9,8 @@ var emperorsRouter = module.exports = function( router, passport ) {
 
   router.use( bodyParser.json() );
 
+  router.use( authorize );
+
   router.route('/emperor')
     .get(function(req, res) {
       Emperor.findAll({})
