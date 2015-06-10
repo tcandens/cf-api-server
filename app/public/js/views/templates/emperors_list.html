@@ -1,0 +1,50 @@
+<!doctype html>
+<html class="no-js" lang="">
+ <head>
+   <meta charset="utf-8">
+   <title>Emperors API</title>
+   <meta name="description" content="">
+   <meta name="viewport" content="width=device-width, initial-scale=1">
+   <link rel="stylesheet" href="/css/main.css" media="screen" charset="utf-8">
+ </head>
+ <body data-ng-app="emperorsApp">
+   <!-- ## ERROR HANDLING DIALOGUE -->
+   <aside data-ng-if="errors.length">
+     <h3>Error!</h3>
+     <ul data-ng-repeat="error in errors">
+       <li>{{ error.message }}</li>
+     </ul>
+     <button data-ng-click="clearErrors()">Clear Errors</button>
+   </aside>
+
+   <!-- # EMPERORS_CONTROLLER -->
+   <main data-ng-controller="emperorsController" data-ng-init="fetchAll()">
+     <data-test-directive></data-test-directive>
+     <!-- ## ADD NEW EMPEROR FORM -->
+     <form name="addEmperorForm" data-ng-model="newEmperor" id="addEmperorForm" data-ng-submit="addEmperor()">
+       <input type="text" required data-ng-model="newEmperor.name" placeholder="Name">
+       <input type="text" required data-ng-model="newEmperor.birth" placeholder="Birth">
+       <input type="text" required data-ng-model="newEmperor.death" placeholder="Death">
+       <button type="submit">Add Emperor</button>
+     </form>
+     <!-- ## LIST OF EMPEROR MODELS -->
+     <ul id="emperors" data-ng-repeat="emperor in emperors | orderBy:'id':true">
+       <li>
+         <button data-ng-click="destroyEmperor( emperor )">X</button>
+         <h3 class="name">{{ emperor.name }}</h3>
+         <p>Birth: {{ emperor.birth }}</p>
+         <p>Death: {{ emperor.death }}</p>
+         <button data-ng-if="!emperor.editing" data-ng-click="toggleEdit( emperor )">Edit</button>
+         <form name="{{'editing' + emperor.id}}" data-ng-if="emperor.editing" data-ng-submit="saveEmperor( emperor )">
+           <button data-ng-click="toggleEdit( emperor )">Cancel</button>
+           <input type="text" data-ng-model="emperor.name">
+           <input type="text" data-ng-model="emperor.birth">
+           <input type="text" data-ng-model="emperor.death">
+           <input type="submit">
+         </form>
+       </li>
+     </ul>
+   </main>
+   <script src="js/bundle.js"></script>
+ </body>
+</html>

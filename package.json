@@ -38,7 +38,8 @@
     "node-libs-browser": "^0.5.2",
     "phantomjs": "^1.9.17",
     "stylus": "^0.51.1",
-    "webpack": "^1.9.10"
+    "webpack": "^1.9.10",
+    "webpack-stream": "^2.0.0"
   },
   "dependencies": {
     "bcrypt": "^0.8.3",

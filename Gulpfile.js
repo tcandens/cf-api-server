@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 var jshint = require('gulp-jshint');
 var mocha = require('gulp-mocha');
-var webpack = require('gulp-webpack');
+var webpack = require('webpack-stream');
 var nodemon = require('gulp-nodemon');
 var del = require('del');
 var karma = require('karma').server;
@@ -25,13 +25,13 @@ gulp.task('stylus:build', function() {
 });
 
 gulp.task('webpack:build', function() {
-  return gulp.src('app/public/js/index.js')
+  return gulp.src('./app/public/js/index.js')
     .pipe(webpack({
       output: {
         filename: 'bundle.js'
       }
     }))
-    .pipe(gulp.dest('build/public/js/'));
+    .pipe(gulp.dest('./build/public/js/'));
 });
 
 gulp.task('webpack:karma', ['webpack:build'], function() {
@@ -69,7 +69,7 @@ gulp.task('nodemonTask', function() {
 gulp.task('sync:build', ['nodemonTask'], function() {
   browserSync.init({
     proxy: {
-      host: 'http://localhost:3000',
+      target: 'localhost:3000',
     }
   });
 });
