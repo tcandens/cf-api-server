@@ -1,0 +1,8 @@
+<section>
+  <div data-ng-if="checkLogin()=true">
+    <button data-ng-click="logout()">Log Out</button>
+  </div>
+  <div data-ng-if="checkLogin()=false">
+    <button data-ng-click="loginRedirect()">Login</button>
+  </div>
+</section>

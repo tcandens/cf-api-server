@@ -2,9 +2,9 @@
 
 var port = process.env.PORT = 3333;
 var DB = process.env.DB = 'emperors_test';
-require('../lib/server');
+require('../app/lib/server');
 
-var Emperor = require('../lib/models/emperor');
+var Emperor = require('../app/lib/models/emperor');
 
 var chai = require('chai');
 var chaiHttp = require('chai-http');

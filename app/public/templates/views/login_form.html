@@ -1,0 +1,12 @@
+<section data-ng-controller="authController">
+  <aside data-ng-if="errors.length">
+    <article data-ng-repeat="error in errors">
+      <p>{{ error.message }}</p>
+    </article>
+  </aside>
+  <form data-ng-submit="loginSubmit( $event, user )">
+    <input type="text" data-ng-model="user.username" required name="username" placeholder="username" />
+    <input type="password" data-ng-model="user.password" required name="password" placeholder="password" />
+    <button type="submit">Login</button>
+  </form>
+</section>
